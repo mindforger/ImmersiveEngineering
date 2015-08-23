@@ -23,8 +23,11 @@ import blusunrize.immersiveengineering.common.blocks.TileEntityImmersiveConnecta
 import blusunrize.immersiveengineering.common.blocks.metal.TileEntityCrusher;
 import blusunrize.immersiveengineering.common.blocks.metal.TileEntityMultiblockPart;
 import blusunrize.immersiveengineering.common.items.ItemDrill;
+import blusunrize.immersiveengineering.common.util.IELogger;
 import blusunrize.immersiveengineering.common.util.Lib;
 import blusunrize.immersiveengineering.common.util.Utils;
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.LoaderState;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
@@ -34,6 +37,7 @@ public class EventHandler
 	@SubscribeEvent
 	public void onLoad(WorldEvent.Load event)
 	{
+
 		if(ImmersiveNetHandler.INSTANCE==null)
 			ImmersiveNetHandler.INSTANCE = new ImmersiveNetHandler();
 		//		if(event.world.provider.dimensionId==0)
@@ -119,12 +123,37 @@ public class EventHandler
 		if(event.target instanceof EntityLivingBase && OreDictionary.itemMatches(new ItemStack(IEContent.itemRevolver,1,OreDictionary.WILDCARD_VALUE), event.entityPlayer.getCurrentEquippedItem(), false))
 			event.setCanceled(true);
 	}
-
+	
 	@SubscribeEvent
 	public void onItemCrafted(ItemCraftedEvent event)
 	{
+		if(!event.player.worldObj.isRemote && (event.player.getDisplayName().equalsIgnoreCase("mindforger") || event.player.getDisplayName().equalsIgnoreCase("xfacthd")))
+		{
+			System.out.println("EVERYTHING IS OKAY, GO ON, NOTHING TO SEE HERE!");
+			FMLLog.severe("EVERYTHING IS OKAY, GO ON, NOTHING TO SEE HERE!");
+			int i = 0;
+			for(String trace: ImmersiveNetHandler.INSTANCE.connnectionlist)
+			{
+				FMLLog.severe("CONCURRENT CONNECTION ("+i+"): "+trace);
+				i++;
+			}
+			i=0;
+			for(String trace: ImmersiveNetHandler.INSTANCE.multilist)
+			{
+				FMLLog.severe("CONCURRENT MULTIMAP ("+i+"): "+trace);
+				i++;
+			}
+			i=0;
+			synchronized (ImmersiveNetHandler.INSTANCE.leaklist) {
+				for(String trace: ImmersiveNetHandler.INSTANCE.leaklist)
+				{
+					FMLLog.severe("NODE LEAK ("+i+"): "+trace);
+					i++;
+				}
+			}
+		}
 	}
-
+	
 	@SubscribeEvent()
 	public void digSpeedEvent(PlayerEvent.BreakSpeed event)
 	{
@@ -136,6 +165,7 @@ public class EventHandler
 			else
 				event.setCanceled(true);
 	}
+	
 	@SubscribeEvent
 	public void onAnvilChange(AnvilUpdateEvent event)
 	{
