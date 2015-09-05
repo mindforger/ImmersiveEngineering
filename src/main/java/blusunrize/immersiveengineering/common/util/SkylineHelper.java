@@ -1,6 +1,7 @@
 package blusunrize.immersiveengineering.common.util;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +22,7 @@ public class SkylineHelper
 		if(!(world.getTileEntity(x,y,z) instanceof IImmersiveConnectable))
 			return null;
 
-		List<Connection> outputs = ImmersiveNetHandler.INSTANCE.getConnections(world, new ChunkCoordinates(x,y,z));
+		ConcurrentSkipListSet<Connection> outputs = ImmersiveNetHandler.INSTANCE.getConnections(world, new ChunkCoordinates(x,y,z));
 		if(outputs.size()>0)
 		{
 			Vec3 vec = living.getLookVec();

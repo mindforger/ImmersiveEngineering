@@ -1,10 +1,8 @@
 package blusunrize.immersiveengineering.common.blocks.metal;
 
-import java.util.List;
+import java.util.concurrent.ConcurrentSkipListSet;
 
-import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -16,8 +14,6 @@ import blusunrize.immersiveengineering.api.energy.ImmersiveNetHandler;
 import blusunrize.immersiveengineering.api.energy.ImmersiveNetHandler.Connection;
 import blusunrize.immersiveengineering.common.blocks.TileEntityIEBase;
 import blusunrize.immersiveengineering.common.entities.EntitySkycrate;
-import blusunrize.immersiveengineering.common.entities.EntitySkylineHook;
-import blusunrize.immersiveengineering.common.items.ItemSkyhook;
 import blusunrize.immersiveengineering.common.util.IELogger;
 import blusunrize.immersiveengineering.common.util.SkylineHelper;
 import blusunrize.immersiveengineering.common.util.Utils;
@@ -41,7 +37,7 @@ public class TileEntitySkycrateDispenser extends TileEntityIEBase implements ISi
 			if(!(worldObj.getTileEntity(cc.posX,cc.posY,cc.posZ) instanceof IImmersiveConnectable))
 				return;
 
-			List<Connection> outputs = ImmersiveNetHandler.INSTANCE.getConnections(worldObj, cc);
+			ConcurrentSkipListSet<Connection> outputs = ImmersiveNetHandler.INSTANCE.getConnections(worldObj, cc);
 			if(outputs.size()>0)
 			{
 				//				Vec3 vec = living.getLookVec();
@@ -62,7 +58,7 @@ public class TileEntitySkycrateDispenser extends TileEntityIEBase implements ISi
 				//					}
 				//				return line;
 
-				Connection connection = outputs.get(0);
+				Connection connection = outputs.first();
 
 				ChunkCoordinates cc0 = connection.end==cc?connection.start:connection.end;
 				ChunkCoordinates cc1 = connection.end==cc?connection.end:connection.start;

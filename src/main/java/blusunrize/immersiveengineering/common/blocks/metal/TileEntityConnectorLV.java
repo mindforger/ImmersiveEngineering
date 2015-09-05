@@ -2,7 +2,7 @@ package blusunrize.immersiveengineering.common.blocks.metal;
 
 import static blusunrize.immersiveengineering.common.util.Utils.toIIC;
 
-import java.util.List;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -180,7 +180,7 @@ public class TileEntityConnectorLV extends TileEntityImmersiveConnectable implem
 		int received = 0;
 		if(!worldObj.isRemote)
 		{
-			List<AbstractConnection> outputs = ImmersiveNetHandler.INSTANCE.getIndirectEnergyConnections(Utils.toCC(this), worldObj);
+			ConcurrentSkipListSet<AbstractConnection> outputs = ImmersiveNetHandler.INSTANCE.getIndirectEnergyConnections(Utils.toCC(this), worldObj);
 			int powerLeft = Math.min(Math.min(getMaxOutput(),getMaxInput()), energy);
 			if(outputs.size()<1)
 				return 0;

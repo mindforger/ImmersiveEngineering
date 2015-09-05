@@ -2,7 +2,7 @@ package blusunrize.immersiveengineering.common.blocks.metal;
 
 import static blusunrize.immersiveengineering.common.util.Utils.toIIC;
 
-import java.util.List;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
@@ -99,7 +99,7 @@ public class TileEntityCapacitorLV extends TileEntityIEBase implements IEnergyHa
 			IImmersiveConnectable node = (IImmersiveConnectable) worldObj.getTileEntity(xCoord+fd.offsetX,yCoord+fd.offsetY,zCoord+fd.offsetZ);
 			if(!node.isEnergyOutput())
 				return;
-			List<AbstractConnection> outputs = ImmersiveNetHandler.INSTANCE.getIndirectEnergyConnections(Utils.toCC(node), worldObj);
+			ConcurrentSkipListSet<AbstractConnection> outputs = ImmersiveNetHandler.INSTANCE.getIndirectEnergyConnections(Utils.toCC(node), worldObj);
 			int received = 0;
 			int powerLeft = Math.min(getMaxOutput(), this.energyStorage.getEnergyStored());
 			for(AbstractConnection con : outputs)
